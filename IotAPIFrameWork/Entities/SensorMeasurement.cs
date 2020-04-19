@@ -19,7 +19,7 @@ namespace ValeIotApi.Entities
         public decimal MeasuredValue { get; set; }
         [Required]
         public string RawData { get; set; }
-        public System.DateTime MeasuredDate { get; set; }
+        public string MeasuredDate { get; set; }
         public virtual Sensor Sensor { get; set; }
         public virtual MeasurementType MeasurementType { get; set; }
         public virtual Location Location { get; set; }

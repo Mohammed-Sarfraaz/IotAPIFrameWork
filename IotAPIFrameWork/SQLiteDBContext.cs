@@ -34,10 +34,10 @@ namespace ValeIotApi
             modelBuilder.Entity<MeasurementType>().ToTable("MeasurementTypes")
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
-            modelBuilder.Entity<SensorDto>().ToTable("Sensors")
+            modelBuilder.Entity<Sensor>().ToTable("Sensors")
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
-            modelBuilder.Entity<SensorMeasurementDto>().ToTable("SensorMeasurements")
+            modelBuilder.Entity<SensorMeasurement>().ToTable("SensorMeasurements")
             .HasOne(d => d.Sensor)
             .WithMany(m => m.SensorMeasurements)
             .OnDelete(DeleteBehavior.Restrict);
