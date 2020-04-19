@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValeIotApi", "ValeIotApi\ValeIotApi.csproj", "{1F73D080-3FB0-4AF9-920F-ACDAED407AB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IotAPIFrameWork", "IotAPIFrameWork\IotAPIFrameWork.csproj", "{1F73D080-3FB0-4AF9-920F-ACDAED407AB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
