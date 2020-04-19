@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>6d7d2d93-524d-4c56-8cb2-a51c629807ca</UserSecretsId>
-    <StartupObject>ValeIotApi.Program</StartupObject>
+    <StartupObject></StartupObject>
     <RuntimeIdentifier>linux-arm</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
     <SshDeployClean />

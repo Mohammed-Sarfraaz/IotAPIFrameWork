@@ -16,6 +16,8 @@ namespace ValeIotApi
 
         public DbSet<SensorMeasurement> SensorMeasurements { get; set; }
 
+        public DbSet<SensorTolerance> SensorTolerances { get; set; }
+
         public DbSet<MeasurementType> MeasurementTypes { get; set; }
 
         public DbSet<Sensor> Sensors { get; set; }
@@ -31,6 +33,9 @@ namespace ValeIotApi
             modelBuilder.Entity<Location>().ToTable("Locations")
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<SensorTolerance>().ToTable("SensorTolerances")
+            .Property(e => e.Id)
+            .ValueGeneratedOnAdd();
             modelBuilder.Entity<MeasurementType>().ToTable("MeasurementTypes")
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
