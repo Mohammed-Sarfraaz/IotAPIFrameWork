@@ -43,9 +43,8 @@ namespace ValeIotApi
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
             modelBuilder.Entity<SensorMeasurement>().ToTable("SensorMeasurements")
-            .HasOne(d => d.Sensor)
-            .WithMany(m => m.SensorMeasurements)
-            .OnDelete(DeleteBehavior.Restrict);
+              .Property(e => e.Id)
+             .ValueGeneratedOnAdd();
 
         }
 

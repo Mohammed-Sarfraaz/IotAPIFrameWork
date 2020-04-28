@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ValeIotApi.Entities;
 
@@ -27,14 +28,21 @@ namespace ValeIotApi.Controllers
         [HttpGet]
         public IEnumerable<Sensor> Get()
         {
-            return _context.Sensors.ToList();
+
+            return _context.Sensors
+                            .Include(l => l.Location)
+                            .Include(d => d.DeviceType)
+                            .ToList();
         }
 
         // GET api/sensor/5
         [HttpGet("{id}")]
         public Sensor Get(int id)
         {
-            return _context.Sensors.FirstOrDefault(s => s.Id == id);
+            return _context.Sensors
+                   .Include(l => l.Location)
+                   .Include(d => d.DeviceType)
+                   .FirstOrDefault(s => s.Id == id);
         }
 
         // POST api/sensor

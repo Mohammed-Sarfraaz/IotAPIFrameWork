@@ -18,6 +18,6 @@ namespace ValeIotApi.Entities
         public string Description { get; set; }
         public virtual DeviceType DeviceType { get; set; }
         public virtual Location Location { get; set; }                
-        public virtual ICollection<SensorMeasurement> SensorMeasurements { get; set; }
+        //public virtual ICollection<SensorMeasurement> SensorMeasurements { get; set; }
     }
 }

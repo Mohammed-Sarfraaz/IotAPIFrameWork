@@ -33,6 +33,20 @@ namespace ValeIotApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Values Api", Version = "v1" });
             });
+            services.AddCors(options =>
+            {
+
+                options.AddPolicy("ValePolicy",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowAnyOrigin()
+                            .WithExposedHeaders("X-Total-Count");
+                    });
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +69,9 @@ namespace ValeIotApi
             });
 
             app.UseRouting();
+
+            app.UseCors("ValePolicy");
+            // app.UseMvc();
 
             app.UseAuthorization();
 

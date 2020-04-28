@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ValeIotApi.Entities;
 
 namespace ValeIotApi.Controllers
 {
     [ApiController]
-    [Route("api/{sensorId}/SensorMeasurement")]
+    [Route("api/{sensorId}/{sensorMeasurementId}/SensorMeasurement")]
     public class SensorMeasurementController : ControllerBase
     {
         private readonly ILogger<SensorMeasurementController> _logger;
@@ -23,9 +24,12 @@ namespace ValeIotApi.Controllers
         }
                 
         [HttpGet]
-        public IEnumerable<SensorMeasurement> Get([FromRoute]long sensorId)
+        public IEnumerable<SensorMeasurement> Get([FromRoute]long sensorId, [FromRoute]long sensorMeasurementId)
         {
-            return _context.SensorMeasurements.Where(p => p.SensorId == sensorId);
+            return _context.SensorMeasurements.Where(p => p.SensorId == sensorId && p.MeasurementTypeId == sensorMeasurementId)
+                    .Include(s => s.Sensor)
+                    .Include(Mt => Mt.MeasurementType);
+                 
         }
 
 

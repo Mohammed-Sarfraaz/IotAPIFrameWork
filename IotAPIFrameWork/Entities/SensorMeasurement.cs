@@ -22,6 +22,6 @@ namespace ValeIotApi.Entities
         public string MeasuredDate { get; set; }
         public virtual Sensor Sensor { get; set; }
         public virtual MeasurementType MeasurementType { get; set; }
-        public virtual Location Location { get; set; }
+       // public virtual Location Location { get; set; }
     }
 }

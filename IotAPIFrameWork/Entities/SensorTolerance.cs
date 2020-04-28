@@ -12,7 +12,9 @@ namespace ValeIotApi.Entities
         [Required]
         public string ToleranceName { get; set; }
         [Required]
-        public decimal ToleranceValue { get; set; }
+        public decimal ToleranceHighValue { get; set; }
+        [Required]
+        public decimal ToleranceLowValue { get; set; }
         [Required]
         public long SensorId { get; set; }
         [Required]

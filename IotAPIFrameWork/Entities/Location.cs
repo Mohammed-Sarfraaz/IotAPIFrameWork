@@ -12,7 +12,7 @@ namespace ValeIotApi.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual ICollection<Sensor> Sensors { get; set; }
-        public virtual ICollection<SensorMeasurement> SensorMeasurements { get; set; }
+        //public virtual ICollection<Sensor> Sensors { get; set; }
+        //public virtual ICollection<SensorMeasurement> SensorMeasurements { get; set; }
     }
 }
