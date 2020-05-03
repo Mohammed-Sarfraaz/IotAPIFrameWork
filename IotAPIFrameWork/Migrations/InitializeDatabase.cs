@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using ValeIotApi.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Unosquare.RaspberryIO;
+using Unosquare.RaspberryIO.Abstractions;
+using Unosquare.WiringPi;
 
 namespace ValeIotApi.Migrations
 {
@@ -19,27 +22,25 @@ namespace ValeIotApi.Migrations
 
                 using (var db = serviceProvider.GetService<SQLiteDBContext>())
                 {
-                    SeedDeviceTypes(db);
-                    SeedLocations(db);
-                    SeedMeasurementTypes(db);                 
+                    SeedDevice(db);
+                   // SeedLocations(db);                                  
                 }
             }
         }
 
-        private static void SeedDeviceTypes(SQLiteDBContext db)
+        private static void SeedDevice(SQLiteDBContext db)
         {
-            if (!db.DeviceTypes.Any())
+            if (!db.Devices.Any())
             {
-                db.DeviceTypes.Add(new DeviceType
-                {                  
-                    Name = "Adrino",
-                    Description = "Adrino1"
+                 Pi.Init<BootstrapWiringPi>();
+
+                db.Devices.AddAsync(new Device
+                {
+                    SerialNo = Pi.Info.Serial,
+                    Name ="RaspberryPi - " + Pi.Info.BoardModel.ToString(),
+                    Description = Pi.Info.ModelName
                 });
-                db.DeviceTypes.Add(new DeviceType
-                {                 
-                    Name = "Raspberry Pi 4",
-                    Description = "Raspberry Pi Zero 4"
-                });
+        
                 db.SaveChanges();
             }
         }
@@ -60,30 +61,7 @@ namespace ValeIotApi.Migrations
                 });               
                 db.SaveChanges();
             }
-        }
-
-        private static void SeedMeasurementTypes(SQLiteDBContext db)
-        {
-            if (!db.MeasurementTypes.Any())
-            {
-                db.MeasurementTypes.Add(new MeasurementType
-                {                   
-                    Name = "Temperature",
-                    Description = "Ambient temperature in Farhenheit"
-                });
-                db.MeasurementTypes.Add(new MeasurementType
-                {
-                    Name = "Humidity",
-                    Description = "Level of relative humidity"
-                });
-                db.MeasurementTypes.Add(new MeasurementType
-                {                    
-                    Name = "Light",
-                    Description = "Light level measured in percent"
-                });
-                db.SaveChanges();
-            }
-        }                     
+        }        
 
     }
 }

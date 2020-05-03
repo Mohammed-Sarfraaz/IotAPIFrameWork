@@ -2,22 +2,23 @@
 
 namespace IotAPIFrameWork.Migrations
 {
-    public partial class IntialCreate : Migration
+    public partial class Intialcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "DeviceTypes",
+                name: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
+                    SerialNo = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeviceTypes", x => x.Id);
+                    table.PrimaryKey("PK_Devices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,26 +36,12 @@ namespace IotAPIFrameWork.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MeasurementTypes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MeasurementTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sensors",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DeviceTypeId = table.Column<long>(nullable: false),
+                    DeviceId = table.Column<long>(nullable: false),
                     LocationId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true)
@@ -63,15 +50,36 @@ namespace IotAPIFrameWork.Migrations
                 {
                     table.PrimaryKey("PK_Sensors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sensors_DeviceTypes_DeviceTypeId",
-                        column: x => x.DeviceTypeId,
-                        principalTable: "DeviceTypes",
+                        name: "FK_Sensors_Devices_DeviceId",
+                        column: x => x.DeviceId,
+                        principalTable: "Devices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sensors_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MeasurementTypes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    SensorId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeasurementTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeasurementTypes_Sensors_SensorId",
+                        column: x => x.SensorId,
+                        principalTable: "Sensors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -93,12 +101,6 @@ namespace IotAPIFrameWork.Migrations
                 {
                     table.PrimaryKey("PK_SensorMeasurements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SensorMeasurements_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_SensorMeasurements_MeasurementTypes_MeasurementTypeId",
                         column: x => x.MeasurementTypeId,
                         principalTable: "MeasurementTypes",
@@ -109,7 +111,7 @@ namespace IotAPIFrameWork.Migrations
                         column: x => x.SensorId,
                         principalTable: "Sensors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,7 +121,8 @@ namespace IotAPIFrameWork.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ToleranceName = table.Column<string>(nullable: false),
-                    ToleranceValue = table.Column<decimal>(nullable: false),
+                    ToleranceHighValue = table.Column<decimal>(nullable: false),
+                    ToleranceLowValue = table.Column<decimal>(nullable: false),
                     SensorId = table.Column<long>(nullable: false),
                     MeasurementTypeId = table.Column<long>(nullable: false),
                     Description = table.Column<string>(nullable: true)
@@ -142,9 +145,9 @@ namespace IotAPIFrameWork.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SensorMeasurements_LocationId",
-                table: "SensorMeasurements",
-                column: "LocationId");
+                name: "IX_MeasurementTypes_SensorId",
+                table: "MeasurementTypes",
+                column: "SensorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SensorMeasurements_MeasurementTypeId",
@@ -157,9 +160,9 @@ namespace IotAPIFrameWork.Migrations
                 column: "SensorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sensors_DeviceTypeId",
+                name: "IX_Sensors_DeviceId",
                 table: "Sensors",
-                column: "DeviceTypeId");
+                column: "DeviceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sensors_LocationId",
@@ -192,7 +195,7 @@ namespace IotAPIFrameWork.Migrations
                 name: "Sensors");
 
             migrationBuilder.DropTable(
-                name: "DeviceTypes");
+                name: "Devices");
 
             migrationBuilder.DropTable(
                 name: "Locations");

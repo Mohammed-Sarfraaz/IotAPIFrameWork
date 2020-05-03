@@ -13,17 +13,15 @@ using System.Collections;
 namespace ValeIotApi.Controllers
 {
     [ApiController]
-    [Route("api/{sensorId}/SensorControlController")]
-    public class SensorControlControllerController : ControllerBase
+    [Route("api/DeviceIoPinsController")]
+    public class DeviceIoPinsController : ControllerBase
     {
-        private readonly ILogger<SensorControlControllerController> _logger;
+        private readonly ILogger<DeviceIoPinsController> _logger;
 
-        private SQLiteDBContext _context { get; set; }
-
-        public SensorControlControllerController(ILogger<SensorControlControllerController> logger, SQLiteDBContext context)
+        
+        public DeviceIoPinsController(ILogger<DeviceIoPinsController> logger)
         {
             _logger = logger;
-            _context = context;
         }
          
         [HttpGet("{pin_number}/{pin_upOrpin_down}")]
@@ -36,11 +34,19 @@ namespace ValeIotApi.Controllers
             return $"pin {pin.BcmPinNumber} set to {pin_upOrpin_down}";
         }
 
-        [HttpGet("{deviceId}")] 
-        public string GetDeviceInfo([FromRoute]int deviceId)
+        [HttpGet]
+        public ActionResult<Device> GetDeviceInfo()
         {
             Pi.Init<BootstrapWiringPi>();
-            return "DeviceInfo :----"+Pi.Info.ToString() +" GOPI Pins :----"+ Pi.Gpio.ToString();
+
+            var device = new Device
+            {
+                SerialNo = Pi.Info.Serial,
+                Name = "RaspberryPi - " + Pi.Info.BoardModel.ToString(),
+                Description = Pi.Info.ModelName
+            };
+
+            return device;//"DeviceInfo :----"+Pi.Info.ToString() +" GOPI Pins :----"+ Pi.Gpio.ToString();
         }
 
     }

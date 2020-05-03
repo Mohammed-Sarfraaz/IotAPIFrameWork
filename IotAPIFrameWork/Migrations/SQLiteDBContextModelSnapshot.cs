@@ -15,7 +15,7 @@ namespace IotAPIFrameWork.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3");
 
-            modelBuilder.Entity("ValeIotApi.Entities.DeviceType", b =>
+            modelBuilder.Entity("ValeIotApi.Entities.Device", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,9 +28,13 @@ namespace IotAPIFrameWork.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SerialNo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceTypes");
+                    b.ToTable("Devices");
                 });
 
             modelBuilder.Entity("ValeIotApi.Entities.Location", b =>
@@ -64,7 +68,12 @@ namespace IotAPIFrameWork.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("SensorId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SensorId");
 
                     b.ToTable("MeasurementTypes");
                 });
@@ -78,7 +87,7 @@ namespace IotAPIFrameWork.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("DeviceTypeId")
+                    b.Property<long>("DeviceId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("LocationId")
@@ -90,7 +99,7 @@ namespace IotAPIFrameWork.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceTypeId");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("LocationId");
 
@@ -124,8 +133,6 @@ namespace IotAPIFrameWork.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
                     b.HasIndex("MeasurementTypeId");
 
                     b.HasIndex("SensorId");
@@ -148,11 +155,14 @@ namespace IotAPIFrameWork.Migrations
                     b.Property<long>("SensorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ToleranceName")
-                        .IsRequired()
+                    b.Property<decimal>("ToleranceHighValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("ToleranceValue")
+                    b.Property<decimal>("ToleranceLowValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ToleranceName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -164,16 +174,25 @@ namespace IotAPIFrameWork.Migrations
                     b.ToTable("SensorTolerances");
                 });
 
+            modelBuilder.Entity("ValeIotApi.Entities.MeasurementType", b =>
+                {
+                    b.HasOne("ValeIotApi.Entities.Sensor", null)
+                        .WithMany("MeasurementTypes")
+                        .HasForeignKey("SensorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ValeIotApi.Entities.Sensor", b =>
                 {
-                    b.HasOne("ValeIotApi.Entities.DeviceType", "DeviceType")
-                        .WithMany("Sensors")
-                        .HasForeignKey("DeviceTypeId")
+                    b.HasOne("ValeIotApi.Entities.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ValeIotApi.Entities.Location", "Location")
-                        .WithMany("Sensors")
+                        .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -181,22 +200,16 @@ namespace IotAPIFrameWork.Migrations
 
             modelBuilder.Entity("ValeIotApi.Entities.SensorMeasurement", b =>
                 {
-                    b.HasOne("ValeIotApi.Entities.Location", "Location")
-                        .WithMany("SensorMeasurements")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ValeIotApi.Entities.MeasurementType", "MeasurementType")
-                        .WithMany("SensorMeasurements")
+                        .WithMany()
                         .HasForeignKey("MeasurementTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ValeIotApi.Entities.Sensor", "Sensor")
-                        .WithMany("SensorMeasurements")
+                        .WithMany()
                         .HasForeignKey("SensorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

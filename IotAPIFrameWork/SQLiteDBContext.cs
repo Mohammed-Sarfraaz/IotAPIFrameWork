@@ -10,7 +10,7 @@ namespace ValeIotApi
 {
     public class SQLiteDBContext : DbContext
     {
-        public DbSet<DeviceType> DeviceTypes { get; set; }
+        public DbSet<Device> Devices { get; set; }
         
         public DbSet<Location> Locations { get; set; }
 
@@ -27,7 +27,7 @@ namespace ValeIotApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DeviceType>().ToTable("DeviceTypes")          
+            modelBuilder.Entity<Device>().ToTable("Devices")          
              .Property(e => e.Id)
              .ValueGeneratedOnAdd();
             modelBuilder.Entity<Location>().ToTable("Locations")

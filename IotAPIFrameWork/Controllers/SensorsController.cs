@@ -10,15 +10,15 @@ using ValeIotApi.Entities;
 namespace ValeIotApi.Controllers
 {
     [ApiController]
-    [Route("api/Sensor")]
+    [Route("api/Sensors")]
     [Produces("application/json")]
-    public class SensorController : ControllerBase
+    public class SensorsController : ControllerBase
     {
-        private readonly ILogger<SensorController> _logger;
+        private readonly ILogger<SensorsController> _logger;
 
         private SQLiteDBContext _context { get; set; }
 
-        public SensorController(ILogger<SensorController> logger, SQLiteDBContext context)
+        public SensorsController(ILogger<SensorsController> logger, SQLiteDBContext context)
         {
             _logger = logger;
             _context = context;
@@ -26,39 +26,41 @@ namespace ValeIotApi.Controllers
 
         // GET: api/sensor
         [HttpGet]
-        public IEnumerable<Sensor> Get()
+        public async Task<ActionResult<IEnumerable<Sensor>>> Get()
         {
 
-            return _context.Sensors
+            return await _context.Sensors
                             .Include(l => l.Location)
-                            .Include(d => d.DeviceType)
-                            .ToList();
+                            .Include(m => m.MeasurementTypes)
+                            .Include(d => d.Device)
+                            .ToListAsync();
         }
 
         // GET api/sensor/5
         [HttpGet("{id}")]
-        public Sensor Get(int id)
+        public async Task<ActionResult<Sensor>> Get(int id)
         {
-            return _context.Sensors
+            return await _context.Sensors
                    .Include(l => l.Location)
-                   .Include(d => d.DeviceType)
-                   .FirstOrDefault(s => s.Id == id);
+                   .Include(d => d.Device)
+                   .Include(m  => m.MeasurementTypes)
+                   .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         // POST api/sensor
         [HttpPost]
-        public void Post([FromBody]Sensor sensor)
+        public async void Post([FromBody]Sensor sensor)
         {
             _context.Sensors.Add(sensor);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
         // PUT api/sensor/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Sensor sensor)
+        public async void Put(int id, [FromBody]Sensor sensor)
         {
             _context.Sensors.Update(sensor);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
         // DELETE api/sensor/5

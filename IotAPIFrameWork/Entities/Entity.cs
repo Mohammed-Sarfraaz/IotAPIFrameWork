@@ -8,7 +8,6 @@ namespace ValeIotApi.Entities
 {
     public class Entity
     {
-      //  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+          public long Id { get; set; }
     }
 }
